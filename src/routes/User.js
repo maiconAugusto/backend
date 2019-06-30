@@ -14,7 +14,7 @@ router.get('/',(req, res)=>{
 
 router.post('/createNewUser',(req, res)=>{
     const {email, password} = req.query
-        //if(email || password) return res.send({error: 'Insensitive data'});
+        if(!email || !password) return res.send({error: 'Insensitive data'});
         
         User.findOne({email: email},(err,data)=>{
             if(err){
@@ -30,5 +30,14 @@ router.post('/createNewUser',(req, res)=>{
                 return res.send({data})
             })
         })
+})
+
+router.post('/auth',(req, res)=>{
+    const { email, password } = req.query
+    if(!email ||! password) return res.send('unauthenticated user')
+
+    User.findOne({email: email},(err,data)=>{
+        if(data.password == password) return res.send('User logged with Sucess!')
+    })
 })
 module.exports = router
